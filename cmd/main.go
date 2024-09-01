@@ -9,16 +9,22 @@ import (
 )
 
 func main() {
+	args := os.Args[1:]
 	if len(os.Args) < 2 {
 		pkg.PrintUsage()
 		os.Exit(1)
 	}
 
-	cmd := os.Args[1]
+	cmd := args[0]
 
 	switch cmd {
 	case "header":
-		err := header.Execute(os.Args[2])
+		if len(args) <= 1 {
+			pkg.PrintUsage()
+			os.Exit(1)
+		}
+
+		err := header.Execute(args[1])
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)

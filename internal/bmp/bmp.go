@@ -56,15 +56,15 @@ func isBM(FileType uint16) bool {
 
 func (h *BMPHeader) String() string {
 	return fmt.Sprintf(`BMP Header:
-	- FileType BM
-	- FileSizeInBytes %d
-	- HeaderSize %d
-	DIB Header:
-	- DibHeaderSize %d
-	- WidthInPixels %d
-	- HeightInPixels %d
-	- PixelSizeInBits %d
-	- ImageSizeInBytes %d`,
+- FileType BM
+- FileSizeInBytes %d
+- HeaderSize %d
+DIB Header:
+- DibHeaderSize %d
+- WidthInPixels %d
+- HeightInPixels %d
+- PixelSizeInBits %d
+- ImageSizeInBytes %d`,
 		h.FileSize,
 		h.HeaderSize,
 		h.HeaderSize,
