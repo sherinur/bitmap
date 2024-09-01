@@ -10,7 +10,7 @@ import (
 
 func main() {
 	args := os.Args[1:]
-	if len(os.Args) < 2 {
+	if len(args) < 1 {
 		pkg.PrintUsage()
 		os.Exit(1)
 	}

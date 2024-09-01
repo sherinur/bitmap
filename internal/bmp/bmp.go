@@ -2,7 +2,6 @@ package bmp
 
 import (
 	"encoding/binary"
-	"errors"
 	"fmt"
 	"os"
 )
@@ -40,7 +39,7 @@ func ExtractHeader(filepath string) (*BMPHeader, error) {
 	}
 
 	if !isBM(header.FileType) {
-		return nil, errors.New("File format not matching BM")
+		return nil, fmt.Errorf("Error: %s is not bitmap file", filepath)
 	}
 
 	return &header, nil
