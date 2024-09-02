@@ -25,7 +25,7 @@ type BMPHeader struct {
 	ColorsImportant uint32
 }
 
-// ExtractHeader opens the file, reads and returns extracted BMP file header.
+// bmp.ExtractHeader opens the file, reads and returns extracted BMP file header.
 func ExtractHeader(filepath string) (*BMPHeader, error) {
 	file, err := os.Open(filepath)
 	if err != nil {
@@ -55,7 +55,7 @@ func isBM(FileType uint16) bool {
 	return false
 }
 
-// PrintHeader prints the extracted BMP file header.
+// bmp.PrintHeader prints the extracted BMP file header.
 func PrintHeader(h *BMPHeader) {
 	textToPrint := fmt.Sprintf(`BMP Header:
 - FileType BM
@@ -84,4 +84,55 @@ DIB Header:
 		h.ColorsImportant)
 
 	fmt.Println(textToPrint)
+}
+
+func MirrorBMP(dh *BMPHeader, inFile string, outFile string) error {
+	f, err := os.Open(inFile)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	// Allocate memory for the mirrored image
+	mirroredImage := make([]byte, dh.ImageSize)
+
+	// Loop through each row of the image
+	for y := 0; y < int(dh.Height); y++ {
+		// Loop through each pixel in the row
+		for x := 0; x < int(dh.Width); x++ {
+			// Calculate the pixel offset in the original image
+			offset := (y*int(dh.Width) + x) * int(dh.BitsPerPixel) / 8
+
+			// Seek to the offset in the file
+			_, err := f.Seek(int64(offset), 0)
+			if err != nil {
+				return err
+			}
+
+			// Read from the file into the mirrored image
+			buf := mirroredImage[offset : offset+int(dh.BitsPerPixel)/8]
+			n, err := f.Read(buf)
+			if err != nil {
+				return err
+			}
+			if n != int(dh.BitsPerPixel)/8 {
+				return fmt.Errorf("short read at offset %d", offset)
+			}
+		}
+	}
+
+	// Open the output file
+	of, err := os.Create(outFile)
+	if err != nil {
+		return err
+	}
+	defer of.Close()
+
+	// Write the mirrored image to the output file
+	_, err = of.Write(mirroredImage)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

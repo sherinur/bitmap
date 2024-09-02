@@ -2,6 +2,7 @@ package pkg
 
 import "fmt"
 
+// PrintUsage prints the usage of command
 func PrintUsage(args ...string) {
 	usage := `Usage: ./bitmap <command> [flags]`
 	if len(args) == 1 {

@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"bitmap/internal/header"
+	"bitmap/internal/mirror"
 	"bitmap/pkg"
 )
 
@@ -35,6 +36,17 @@ func main() {
 				// newline after each info, except the last one
 				fmt.Println()
 			}
+		}
+	case "mirror":
+		if len(args) < 3 {
+			pkg.PrintUsage()
+			os.Exit(1)
+		}
+
+		err := mirror.Execute(args[1], args[2])
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
 		}
 	default:
 		fmt.Println("Unknown command:", cmd)
