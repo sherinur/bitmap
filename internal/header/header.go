@@ -1,8 +1,6 @@
 package header
 
 import (
-	"fmt"
-
 	"bitmap/internal/bmp"
 )
 
@@ -12,7 +10,7 @@ func Execute(filepath string) error {
 		return err
 	}
 
-	fmt.Println(header)
+	bmp.PrintHeader(header)
 
 	return nil
 }

@@ -20,14 +20,21 @@ func main() {
 	switch cmd {
 	case "header":
 		if len(args) <= 1 {
-			pkg.PrintUsage()
+			pkg.PrintUsage("header")
 			os.Exit(1)
 		}
 
-		err := header.Execute(args[1])
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+		for i := 1; i < len(args); i++ {
+			err := header.Execute(args[i])
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
+
+			if i != len(args)-1 {
+				// newline after each info, except the last one
+				fmt.Println()
+			}
 		}
 	default:
 		fmt.Println("Unknown command:", cmd)

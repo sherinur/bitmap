@@ -25,6 +25,7 @@ type BMPHeader struct {
 	ColorsImportant uint32
 }
 
+// ExtractHeader opens the file, reads and returns extracted BMP file header.
 func ExtractHeader(filepath string) (*BMPHeader, error) {
 	file, err := os.Open(filepath)
 	if err != nil {
@@ -45,6 +46,7 @@ func ExtractHeader(filepath string) (*BMPHeader, error) {
 	return &header, nil
 }
 
+// isBM checks if the file type is BM and returns boolean.
 func isBM(FileType uint16) bool {
 	if FileType == 0x4d42 || FileType == 0x4362 {
 		return true
@@ -53,8 +55,9 @@ func isBM(FileType uint16) bool {
 	return false
 }
 
-func (h *BMPHeader) String() string {
-	return fmt.Sprintf(`BMP Header:
+// PrintHeader prints the extracted BMP file header.
+func PrintHeader(h *BMPHeader) {
+	textToPrint := fmt.Sprintf(`BMP Header:
 - FileType BM
 - FileSizeInBytes %d
 - HeaderSize %d
@@ -63,12 +66,22 @@ DIB Header:
 - WidthInPixels %d
 - HeightInPixels %d
 - PixelSizeInBits %d
-- ImageSizeInBytes %d`,
+- ImageSizeInBytes %d
+- XPixelsPerMeter %d
+- YPixelsPerMeter %d
+- ColorsUsed %d
+- ColorsImportant %d`,
 		h.FileSize,
 		h.HeaderSize,
 		h.HeaderSize,
 		h.Width,
 		h.Height,
 		h.BitsPerPixel*8,
-		h.ImageSize)
+		h.ImageSize,
+		h.XPixelsPerMeter,
+		h.YPixelsPerMeter,
+		h.ColorsUsed,
+		h.ColorsImportant)
+
+	fmt.Println(textToPrint)
 }
