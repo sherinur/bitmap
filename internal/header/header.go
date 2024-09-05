@@ -1,17 +1,23 @@
 package header
 
 import (
+	"fmt"
+	"os"
+
 	"bitmap/internal/bmp"
 )
 
 // header.Execute executes the header command
 func Execute(filepath string) error {
-	header, err := bmp.ExtractHeader(filepath)
+	p := bmp.BitmapParser{}
+
+	bmpFile, err := p.Parse(filepath)
 	if err != nil {
-		return err
+		fmt.Println(err)
+		os.Exit(1)
 	}
 
-	bmp.PrintHeader(header)
+	bmp.PrintHeader(bmpFile)
 
 	return nil
 }

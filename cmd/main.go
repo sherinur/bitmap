@@ -24,7 +24,6 @@ func main() {
 			pkg.PrintUsage("header")
 			os.Exit(1)
 		}
-
 		for i := 1; i < len(args); i++ {
 			err := header.Execute(args[i])
 			if err != nil {
