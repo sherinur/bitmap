@@ -1,16 +1,18 @@
 package mirror
 
-func Execute(inFile, outFile string) error {
-	// TODO: Implement mirror execution
-	// header, err := bmp.ExtractHeader(inFile)
-	// if err != nil {
-	// 	return err
-	// }
+import "bitmap/pkg/bmp"
 
-	// err = applyMirror(header, inFile, outFile)
-	// if err != nil {
-	// 	return err
-	// }
+func Execute(inFile, outFile string) error {
+	p := bmp.BitmapParser{}
+	bmpFile, err := p.Parse(inFile)
+	if err != nil {
+		return err
+	}
+
+	err = bmpFile.ApplyMirrorVertical()
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

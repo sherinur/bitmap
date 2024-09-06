@@ -6,13 +6,13 @@ import (
 
 	"bitmap/internal/header"
 	"bitmap/internal/mirror"
-	"bitmap/pkg"
+	"bitmap/pkg/utils"
 )
 
 func main() {
 	args := os.Args[1:]
 	if len(args) < 1 {
-		pkg.PrintUsage()
+		utils.PrintUsage()
 		os.Exit(1)
 	}
 
@@ -21,7 +21,7 @@ func main() {
 	switch cmd {
 	case "header":
 		if len(args) <= 1 {
-			pkg.PrintUsage("header")
+			utils.PrintUsage("header")
 			os.Exit(1)
 		}
 		for i := 1; i < len(args); i++ {
@@ -38,7 +38,7 @@ func main() {
 		}
 	case "mirror":
 		if len(args) < 3 {
-			pkg.PrintUsage()
+			utils.PrintUsage()
 			os.Exit(1)
 		}
 
@@ -49,7 +49,7 @@ func main() {
 		}
 	default:
 		fmt.Println("Unknown command:", cmd)
-		pkg.PrintUsage()
+		utils.PrintUsage()
 		os.Exit(1)
 	}
 }
