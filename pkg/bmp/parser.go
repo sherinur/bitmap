@@ -78,9 +78,6 @@ func (p *BitmapParser) Parse(filepath string) (*BMPFile, error) {
 		return nil, err
 	}
 
-	// // ! Отладка
-	// fmt.Printf("Header Offset: %d, Width: %d, Height: %d, ImageSize: %d\n", bmpFile.Header.Offset, bmpFile.InfoHeader.Width, bmpFile.InfoHeader.Height, bmpFile.InfoHeader.ImageSize)
-
 	// making two-dimensional slice of pixels
 	bmpFile.ImageData, err = convertToPixelArray(data, int(bmpFile.InfoHeader.Width), int(bmpFile.InfoHeader.Height))
 	if err != nil {

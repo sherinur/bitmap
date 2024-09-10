@@ -13,6 +13,8 @@ func Execute(filepath string) error {
 		return err
 	}
 
+	bmpFile.DebugPrint()
+
 	bmp.PrintHeader(bmpFile)
 
 	return nil

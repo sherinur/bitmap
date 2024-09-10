@@ -9,10 +9,11 @@ func Execute(inFile, outFile string) error {
 		return err
 	}
 
-	err = bmpFile.ApplyMirrorVertical()
-	if err != nil {
-		return err
-	}
+	bmpFile.DebugPrint()
+	// err = bmpFile.ApplyMirrorVertical()
+	// if err != nil {
+	// 	return err
+	// }
 
 	return nil
 }
