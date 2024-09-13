@@ -2,15 +2,14 @@ package bmp
 
 import (
 	"encoding/binary"
-	"errors"
 	"os"
 )
 
 // bmp.SaveBMP saves the image data to a BMP file
 func SaveBMP(filename string, bmpFile *BMPFile) error {
-	if !validateBMPData(bmpFile) {
-		return errors.New("File save error: BMP data is not valid")
-	}
+	// if !validateBMPData(bmpFile) {
+	// 	return ErrSaveError
+	// }
 
 	file, err := os.Create(filename)
 	if err != nil {
@@ -137,8 +136,8 @@ func writeDIBHeader(file *os.File, infoHeader *DIBHeader) error {
 	return nil
 }
 
-// bmp.ValidateBMPData() checks if the BMP data is valid
-func validateBMPData(bmpFile *BMPFile) bool {
-	// TODO: implement validating bmp
-	return true
-}
+// // bmp.ValidateBMPData() checks if the BMP data is valid
+// func validateBMPData(bmpFile *BMPFile) bool {
+// 	// TODO: implement validating bmp
+// 	return true
+// }

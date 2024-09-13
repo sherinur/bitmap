@@ -7,8 +7,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-
-	"bitmap/pkg/errors"
 )
 
 // BMPParser is a parser for bitmap(.bmp, .dib) file.
@@ -23,20 +21,17 @@ type BitmapParser struct {
 // BitmapParser.Parse parses the bitmap(.bmp, .dib) file.
 func (p *BitmapParser) Parse(filepath string) (*BMPFile, error) {
 	bmpFile := &BMPFile{}
-
 	// open file
 	file, err := os.Open(filepath)
 	if err != nil {
 		return nil, err
 	}
 	defer file.Close()
-
 	// BMPHeader read
 	err = binary.Read(file, binary.LittleEndian, &bmpFile.Header)
 	if err != nil {
 		return nil, err
 	}
-
 	// signature check
 	if !isBM(bmpFile.Header.Type) {
 		return nil, fmt.Errorf("Error: %s is not bitmap file", filepath)
@@ -50,12 +45,12 @@ func (p *BitmapParser) Parse(filepath string) (*BMPFile, error) {
 
 	// compression check
 	if bmpFile.InfoHeader.Compression != 0 {
-		return nil, errors.ErrCompressedBMP
+		return nil, ErrCompressedBMP
 	}
 
 	// 24-bits check
 	if bmpFile.InfoHeader.BitsPerPixel != 24 {
-		return nil, errors.ErrUnsupportedBits
+		return nil, ErrUnsupportedBits
 	}
 
 	// file info correction
@@ -78,6 +73,9 @@ func (p *BitmapParser) Parse(filepath string) (*BMPFile, error) {
 		return nil, err
 	}
 
+	// // ! Отладка
+	// fmt.Printf("Header Offset: %d, Width: %d, Height: %d, ImageSize: %d\n", bmpFile.Header.Offset, bmpFile.InfoHeader.Width, bmpFile.InfoHeader.Height, bmpFile.InfoHeader.ImageSize)
+
 	// making two-dimensional slice of pixels
 	bmpFile.ImageData, err = convertToPixelArray(data, int(bmpFile.InfoHeader.Width), int(bmpFile.InfoHeader.Height))
 	if err != nil {
@@ -86,42 +84,4 @@ func (p *BitmapParser) Parse(filepath string) (*BMPFile, error) {
 
 	p.isParsed = true
 	return bmpFile, nil
-}
-
-// isBM checks if the file type is BM and returns boolean.
-func isBM(Type [2]byte) bool {
-	return Type[0] == 'B' && Type[1] == 'M'
-}
-
-// convertToPixelArray converts the image data to two-dimensional pixel array.
-func convertToPixelArray(data []byte, width int, height int) ([][]Pixel, error) {
-	rowSize := (width*3 + 3) &^ 3
-	expectedSize := rowSize * height
-
-	if len(data) > expectedSize {
-		data = data[:expectedSize]
-	}
-
-	if len(data) != expectedSize {
-		return nil, errors.ErrNotBMPFile
-	}
-
-	pixels := make([][]Pixel, height)
-	for i := range pixels {
-		pixels[i] = make([]Pixel, width)
-	}
-
-	for i := 0; i < height; i++ {
-		rowStart := i * rowSize
-		for j := 0; j < width; j++ {
-			index := rowStart + j*3
-			pixels[i][j] = Pixel{
-				Blue:  data[index],
-				Green: data[index+1],
-				Red:   data[index+2],
-			}
-		}
-	}
-
-	return pixels, nil
 }
