@@ -1,5 +1,10 @@
 package bmp
 
+import (
+	"io"
+	"time"
+)
+
 // bmp.go stores the BMP image data
 
 // BMPFile stores the information of a bitmap file
@@ -7,27 +12,33 @@ type BMPFile struct {
 	Header     BMPHeader
 	InfoHeader DIBHeader
 	ImageData  [][]Pixel
+	ModTime    time.Time
 }
 
+// BMPParser is a parser for bitmap(.bmp, .dib) file.
+// parser.go
+type BMPParser interface {
+	Parse(r io.Reader) (*BMPFile, error)
+}
+
+type BitmapParser struct {
+	isParsed       bool
+	lastParsedPath string
+	lastParsedBMP  *BMPFile
+}
+
+// BMPManipulator is a interface for processing and doing manipulations for bitmap(.bmp, .dib) file.
+// manipulator.go
 type BMPManipulator interface {
 	ApplyNegative()
-
 	ApplyGrayScale()
-
 	ApplyByColor(string)
-
 	ApplyBlur()
-
 	ApplyPixelation(int)
-
 	CropImage(int, int, int, int)
-
 	ApplyMirrorHorizontal()
-
 	ApplyMirrorVertical()
-
 	ApplyRotation(string)
-
 	DebugPrint()
 }
 

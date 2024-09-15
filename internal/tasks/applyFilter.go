@@ -3,7 +3,7 @@ package tasks
 import (
 	"fmt"
 
-	"test/pkg/bmp"
+	"bitmap/pkg/bmp"
 )
 
 // execute function (input file, file that we need to create, color to apply)

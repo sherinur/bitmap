@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"os"
 
-	"test/cmd"
-	"test/internal/apply"
-	"test/internal/header"
-	"test/pkg/bmp"
-	"test/pkg/taskmanager"
+	"bitmap/cmd"
+	"bitmap/internal/apply"
+	"bitmap/internal/header"
+	"bitmap/pkg/bmp"
+	"bitmap/pkg/taskmanager"
 )
 
 var (
@@ -18,7 +18,7 @@ var (
 )
 
 func main() {
-	if len(os.Args) <= 2 {
+	if len(os.Args) <= 1 {
 		cmd.PrintUsage()
 		os.Exit(1)
 	}
@@ -27,14 +27,28 @@ func main() {
 
 	switch command {
 	case "apply":
-		newFilepath := args[len(args)-1]
-		filepath := args[len(args)-2]
+		if len(os.Args) <= 2 {
+			cmd.PrintCommandHelp(command)
+			os.Exit(1)
+		}
+
+		lastArg := os.Args[len(os.Args)-1]
+		secondToLastArg := args[len(args)-2]
+		var newFilepath, filepath string
+		if lastArg != "-h" && lastArg != "--help" && secondToLastArg != "-h" && secondToLastArg != "--help" {
+			newFilepath = lastArg
+			filepath = secondToLastArg
+		} else {
+			cmd.PrintCommandHelp(command)
+			os.Exit(1)
+		}
 
 		// parse and store bmpfile
 		p := bmp.BitmapParser{}
 		GlobalBmpFile, err := p.Parse(filepath)
 		if err != nil {
 			fmt.Println(err)
+			cmd.PrintCommandHelp(command)
 			os.Exit(1)
 		}
 
@@ -45,6 +59,18 @@ func main() {
 		}
 
 	case "header":
+		if len(os.Args) <= 2 {
+			cmd.PrintCommandHelp(command)
+			os.Exit(1)
+		}
+
+		for _, arg := range args[1:] {
+			if arg == "-h" || arg == "--help" {
+				cmd.PrintCommandHelp(command)
+				os.Exit(1)
+			}
+		}
+
 		for i := 1; i < len(args); i++ {
 			err := header.Execute(args[i])
 			if err != nil {

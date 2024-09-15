@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"test/pkg/bmp"
+	"bitmap/pkg/bmp"
 )
 
 func ApplyCrop(bmpFile *bmp.BMPFile, cropParams string) error {

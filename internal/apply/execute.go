@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"test/cmd"
-	"test/pkg/bmp"
-	"test/pkg/taskmanager"
+	"bitmap/cmd"
+	"bitmap/pkg/bmp"
+	"bitmap/pkg/taskmanager"
 )
 
 func Execute(newFilepath string, taskQueue *taskmanager.TaskQueue, bmpFile *bmp.BMPFile) error {

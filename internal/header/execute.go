@@ -1,7 +1,7 @@
 package header
 
 import (
-	"test/pkg/bmp"
+	"bitmap/pkg/bmp"
 )
 
 // header.Execute executes the header command

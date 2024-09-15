@@ -3,7 +3,7 @@ package tasks
 import (
 	"fmt"
 
-	"test/pkg/bmp"
+	"bitmap/pkg/bmp"
 )
 
 func ApplyRotate(bmpFile *bmp.BMPFile, rotation string) error {

@@ -3,7 +3,7 @@ package tasks
 import (
 	"strings"
 
-	"test/pkg/bmp"
+	"bitmap/pkg/bmp"
 )
 
 // Execute processes the image file, applies the mirror effect, and saves the result.

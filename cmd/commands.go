@@ -16,6 +16,12 @@ type Option struct {
 	Description string
 }
 
+// General option:
+// "help": {
+// 	Flag:        []string{"h", "help"},
+// 	Description: "prints program usage information",
+// },
+
 var Commands = map[string]Command{
 	"header": {
 		Name:        "header",
@@ -28,10 +34,6 @@ var Commands = map[string]Command{
 		Description: "applies processing to the image and saves it to the file",
 		Usage:       "bitmap apply [options] <source_file> <output_file>",
 		Options: map[string]Option{
-			// "help": {
-			// 	Flag:        []string{"h", "help"},
-			// 	Description: "prints program usage information",
-			// },
 			"rotate": {
 				Flag:        []string{"r", "rotate"},
 				Description: "rotates a bitmap image by a specified angle",
@@ -66,23 +68,34 @@ func PrintUsage() {
 func PrintCommandHelp(commandName string) {
 	if Commands[commandName].Usage != "" {
 		usage := Commands[commandName].Usage
-		fmt.Printf("Usage:\n  %s\n\n", usage)
+		fmt.Printf("Usage:\n  %s\n", usage)
 	}
-
-	PrintCommandOptions(commandName)
+	if len(Commands[commandName].Options) > 0 {
+		fmt.Println()
+		PrintCommandOptions(commandName)
+	}
 }
 
 func PrintCommandOptions(commandName string) {
-	if len(Commands[commandName].Options) > 0 {
-		alignment := findAlignment()
+	alignment := findAlignment()
 
-		fmt.Println("The options are:")
-		fmt.Printf("  %-*s  %s\n", alignment, "-h, --help", "prints program usage information")
-		// for _, option := range Commands[commandName].Options {
-		// 	for _, flag := range option.Flag {
-		// 	}
-		// 	fmt.Printf("  --%-*s  %s\n", alignment, option.Flag, option.Description)
-		// }
+	fmt.Println("The options are:")
+	fmt.Printf("  %-*s  %s\n", alignment, "-h, --help", "prints program usage information")
+
+	for _, option := range Commands[commandName].Options {
+		var flags string
+		for i, flag := range option.Flag {
+			if i > 0 {
+				flags += ", "
+			}
+			if len(flag) == 1 {
+				flags += "-" + flag
+			} else {
+				flags += "--" + flag
+			}
+		}
+
+		fmt.Printf("  %-*s  %s\n", alignment, flags, option.Description)
 	}
 }
 

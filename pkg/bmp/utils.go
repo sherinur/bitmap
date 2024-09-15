@@ -40,12 +40,6 @@ func convertToPixelArray(data []byte, width int, height int) ([][]Pixel, error) 
 	return pixels, nil
 }
 
-// for debugging
-func (bmpFile *BMPFile) DebugPrint() {
-	// fmt.Printf("Header Offset: %d, Width: %d, Height: %d, ImageSize: %d\n", bmpFile.Header.Offset, bmpFile.InfoHeader.Width, bmpFile.InfoHeader.Height, bmpFile.InfoHeader.ImageSize)
-	fmt.Println(len(bmpFile.ImageData))
-}
-
 // bmp.PrintHeader prints the extracted BMP file header.
 func PrintHeader(bmpFile *BMPFile) {
 	textToPrint := fmt.Sprintf(`BMP Header:

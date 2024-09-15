@@ -32,6 +32,14 @@ func SaveBMP(filename string, bmpFile *BMPFile) error {
 		return err
 	}
 
+	filepadding := int(bmpFile.InfoHeader.ImageSize) % 4
+	for i := 0; i < filepadding; i++ {
+		err := binary.Write(file, binary.LittleEndian, byte(0))
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -40,7 +48,7 @@ func writeImageData(file *os.File, imageData [][]Pixel) error {
 	bytesPerPixel := 3
 
 	for _, row := range imageData {
-		// write pixels
+		// Write pixels
 		for _, pixel := range row {
 			err := binary.Write(file, binary.LittleEndian, pixel)
 			if err != nil {
@@ -48,8 +56,11 @@ func writeImageData(file *os.File, imageData [][]Pixel) error {
 			}
 		}
 
-		// calculating padding
-		padding := (4 - (len(row) * bytesPerPixel % 4)) % 4
+		// Calculate padding for the row
+		rowSize := len(row) * bytesPerPixel
+		padding := (4 - (rowSize % 4)) % 4
+
+		// Write padding bytes
 		for i := 0; i < padding; i++ {
 			err := binary.Write(file, binary.LittleEndian, byte(0))
 			if err != nil {
